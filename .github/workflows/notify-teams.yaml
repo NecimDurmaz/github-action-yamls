@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Mesajı yazdır
-        run: echo "Gelen mesaj: ${{ inputs.message }}"
+        run: echo "Gelen mesaj ${{ inputs.message }}"
 
       - name: Webhook'a gönder
         run: |
