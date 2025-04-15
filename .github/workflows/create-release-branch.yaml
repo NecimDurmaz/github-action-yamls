@@ -1,4 +1,4 @@
-name: 📦 Create Release Branch
+name: Create Release Branch
 
 on:
   workflow_call:
@@ -7,26 +7,31 @@ on:
         required: true
         type: string
     secrets:
-      GITHUB_TOKEN:
+      MY_GITHUB_TOKEN:
         required: true
 
 jobs:
   create-branch:
-    name: Create release branch
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # tüm geçmişi al ki branch oluştururken sorun çıkmasın
 
-      - name: Create and push branch
+      - name: Create release branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+          VERSION: ${{ inputs.version }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          BRANCH_NAME="release-v$VERSION"
+          echo "Creating new branch: $BRANCH_NAME"
 
-          # Yeni branch adını oluştur
-          branch_name="release-v${{ inputs.version }}"
-          git checkout -b "$branch_name"
+          # Mevcut HEAD'den yeni branch oluştur
+          git checkout -b "$BRANCH_NAME"
 
-          # Branch'i pushla
-          git push origin "$branch_name"
+          # Push et
+          git push origin "$BRANCH_NAME"
+
+          echo "✅ Branch '$BRANCH_NAME' created and pushed."
