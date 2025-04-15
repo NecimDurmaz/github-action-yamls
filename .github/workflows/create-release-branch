@@ -6,9 +6,6 @@ on:
       version:
         required: true
         type: string
-    secrets:
-      GITHUB_TOKEN:
-        required: true
 
 jobs:
   create-branch:
@@ -23,7 +20,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           # Yeni branch adını oluştur
           branch_name="release-v${{ inputs.version }}"
           git checkout -b "$branch_name"
